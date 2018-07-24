@@ -10,6 +10,9 @@ import './styles/styles.css'
 import 'react-dates/lib/css/_datepicker.css';
 import { firebase } from './firebase/firebase';
 import LoadingPage from './components/LoadingPage';
+import { startSetPosts } from './actions/posts'
+import { startSetReplies } from './actions/replies'
+import { startSetUsers, startAddUser } from './actions/users'
 
 const store = configureStore();
 const jsx = (
@@ -27,16 +30,32 @@ const renderApp = () => {
 
 ReactDOM.render(<LoadingPage />, document.getElementById('app'));
 
+
 firebase.auth().onAuthStateChanged((user) => {
+  console.log('auth changed')
   if (user) {
     store.dispatch(login(user.uid));
-    renderApp();
-    if (history.location.pathname === '/') {
-      history.push('/dashboard');
-    }
+    const promise1 = store.dispatch(startSetPosts())
+    const promise2 = store.dispatch(startSetUsers())
+    const promise3 = store.dispatch(startSetReplies())
+   
+    Promise.all([promise1, promise2, promise3])
+      .then(() => {
+        const existingUsers = store.getState().users
+        const userFound = !!existingUsers.find((existingUser) => {
+          return existingUser.uid === user.uid
+        })
+        if (!userFound) { 
+          store.dispatch(startAddUser('social'))
+        }
+        renderApp();
+        if (history.location.pathname === '/') {
+          history.push('/dashboard');
+        }
+      })
   } else {
     store.dispatch(logout());
     renderApp();
     history.push('/');
   }
-});
+})

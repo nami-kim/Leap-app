@@ -1,7 +1,10 @@
 /* color */
-.main-blue {
-  color: #48adff;
-};
+.bg-blue-custom {
+  background: #48adff;
+}
+.bg-green-custom {
+  background: #69ca00;
+}
 
 /* Font Size */
 /* .font-size-large: 1.8rem;
