@@ -43,7 +43,7 @@ export const updateUser = (updates) => ({
 })
 // start update users: updates should be an object!
 export const startUpdateUser = (updates) => {
-  console.log('startUpdateUser ran')
+  console.log('startUpdateUser ran', updates)
   return (dispatch, getState) => {
     const uid = getState().authUser.uid
     return database.ref(`users/${uid}`).set(updates).then(() => {

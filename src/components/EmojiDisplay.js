@@ -5,7 +5,7 @@ export default class EmojiDisplay extends React.Component {
     super(props)
   }
   onUpdateEmoji = (emoji) => {
-    this.props.startAddEmojiReply(this.props.postId, emoji)
+    this.props.startAddEmoji(this.props.id, emoji)
   }
   render() {
     return (

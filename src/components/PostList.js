@@ -5,9 +5,11 @@ import Container from './Container'
 
 const PostList = (props) => (
   <Container>
-    <div className="">
-      {props.posts.map((post) => {
-        return <PostListItem key={post.postId} {...post} />
+    <div>
+      {props.posts.filter((post) => {
+        return post.type === "post"
+      }).map((post) => {
+        return <PostListItem key={post.id} {...post} />
       })}
     </div>
   </Container>

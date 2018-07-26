@@ -2,8 +2,6 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { compose } from 'recompose'
 import { Link } from 'react-router-dom'
-import { startSetUsers } from '../actions/users'
-import withAuthorization from './withAuthorization';
 
 
 export class HomePage extends React.Component {
@@ -22,7 +20,6 @@ export class HomePage extends React.Component {
           <Link to="/signup">Signup</Link>
           <Link to="/login">Login</Link>
           <Link to="/account">Account</Link>
-          <Link to="/admin">Admin</Link>
           <Link to="/">Home</Link>
           <Link to="/logout">Logout</Link>
         </div>

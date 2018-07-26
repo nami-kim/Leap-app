@@ -6,9 +6,10 @@ import { options } from './TopicSelect'
 import { Container } from './Container'
 import ReplyForm from './ReplyForm'
 import EmojiPicker from './EmojiPicker'
-import { EmojiButton, ReplyButton } from './Button'
+import { EmojiButton } from './Button'
 import EmojiDisplay from './EmojiDisplay'
 import ReplyList from './ReplyList'
+import { startAddEmoji } from '../actions/posts'
 
 class PostPage extends React.Component {
   constructor(props) {
@@ -18,10 +19,21 @@ class PostPage extends React.Component {
     }
   }
 
+  handleToggleVisibility = (e) => {
+    this.setState(() => ({
+      emojiVisibility: !this.state.emojiVisibility
+    }))
+  }
+
+  onSubmitEmoji = (emoji) => {
+    this.props.startAddEmoji(this.props.post.id, emoji)
+    this.setState(() => ({
+      emojiVisibility: !this.state.emojiVisibility
+    }))
+  }
   render() {
-    console.log(this.props.replies)
-    console.log(this.props.match.params.postId)
-    const { createdAt, topic, title, website, anonymous, name, note, postId, emojis, uid } = this.props.post
+    console.log(this.props.post)
+    const { createdAt, topic, title, website, anonymous, name, note, id, emojis, uid } = this.props.post
     const isAuthor = uid === this.props.authUser.uid
     const postCreatedAt = moment(createdAt)
     const selectOption = options.find((option) => {
@@ -62,31 +74,30 @@ class PostPage extends React.Component {
               <EmojiDisplay
                 emojis={emojis}
                 startAddEmoji={this.props.startAddEmoji}
-                postId={postId} />
-              <div className={!this.state.emojiVisibility && "dn"}>
+                id={id} />
+              <div className={this.state.emojiVisibility ? "" : "dn"}>
                 <EmojiPicker
                   onSubmit={this.onSubmitEmoji}
+                  style={{ position: 'relative', top: '30px' }}
                 />
               </div>
             </div>
             <div className={isAuthor ? "mv3" : "dn"}>
               <Link
-                to={`/posts/${postId}/edit`}
+                to={`/posts/${id}/edit`}
                 className={"no-underline btn black bg-light-gray ba b--black-20 f7 pv2 ph2 tracked mr2"}
               >Edit Your Post
               </Link>
             </div>
             <div className="mv2 flex items-center">
-              <ReplyForm {...this.props.post} />
+              <ReplyForm post={this.props.post} type="replyToPost" history={this.props.history} linkId={this.props.match.params.id}/>
             </div>
           </div>
         </div>
         <div className="w-100 bl b--black-20">
-          <ReplyList post={this.props.post} replies={this.props.replies} />
+          <ReplyList post={this.props.post} posts={this.props.posts} />
         </div>
-        <div className="mv2 flex items-center">
-          <ReplyForm {...this.props.post} />
-        </div>
+        
       </Container>
     )
   }
@@ -95,15 +106,16 @@ class PostPage extends React.Component {
 
 const mapStateToProps = (state, props) => {
   return {
+    posts: state.posts,
     post: state.posts.find((post) => {
-      return post.postId === props.match.params.postId
+      return post.id === props.match.params.id
     }),
-    authUser: state.authUser,
-    replies: state.replies.filter((reply) => {
-      return reply.postId === props.match.params.postId
-    })
+    authUser: state.authUser
+  }
+}
 
-  };
+const mapDispatchToProps = (dispatch) => ({
+  startAddEmoji: (id, emoji) => dispatch(startAddEmoji(id, emoji))
+})
 
-};
-export default connect(mapStateToProps)(PostPage)
+export default connect(mapStateToProps, mapDispatchToProps)(PostPage)

@@ -1,7 +1,7 @@
 import React from 'react'
-import { ReplyButton, FollowButton, SecondReplyBtn } from './Button'
+import { ReplyButton } from './Button'
 import moment from 'moment'
-import { startAddReply } from '../actions/replies'
+import { startAddPost } from '../actions/posts'
 import { connect } from 'react-redux'
 
 
@@ -16,8 +16,8 @@ export class ReplyForm extends React.Component {
       error: '',
     }
   }
-  
-  onReplyVisibilityToggle = (e) => {
+
+  onreplyVisibilityToggle = (e) => {
     e.preventDefault()
     this.setState(() => ({ replyVisibility: !this.state.replyVisibility }))
   }
@@ -35,23 +35,32 @@ export class ReplyForm extends React.Component {
       note: this.state.note,
       anonymous: this.state.anonymous,
       createdAt: this.state.createdAt.valueOf(),
+      type: 'reply'
     }
-console.log(reply)
-console.log(this.props.postId)
-    this.props.startAddReply(this.props.postId, reply)
-      .then(() => this.setState(() => ({
-        replyVisibility: false,
-        note: '',
-        anonymous: false,
-        createdAt: moment(),
-        error: '',})))
+
+    const replyTo = this.props.post.id
+    this.props.startAddPost(replyTo, reply)
+    this.setState(() => ({
+      replyVisibility: false,
+      note: '',
+      anonymous: false,
+      createdAt: moment(),
+      error: '',
+    }))
+
   }
   render() {
     return (
       <div className="w-100">
         <div className={this.state.replyVisibility ? "dn" : "w-100 mv2"}>
-          <ReplyButton onClick={this.onReplyVisibilityToggle}>Reply to {this.props.name}</ReplyButton>
-          <span><ReplyButton className="white bg-green-custom">Follow</ReplyButton></span>
+          <ReplyButton
+            className={this.props.type === "reply" ? "dark-blue bg-dark" : "white bg-blue-custom"}
+            onClick={this.onreplyVisibilityToggle}>Reply to {this.props.post.name}
+          </ReplyButton>
+          <span
+            className={this.props.type === "reply" ? "dn" : ""}>
+            <ReplyButton className="white bg-green-custom">Follow</ReplyButton>
+          </span>
         </div>
         <div className={this.state.replyVisibility ? "w-100" : "dn"}>
           <form onSubmit={this.onSubmitReply}>
@@ -75,7 +84,7 @@ console.log(this.props.postId)
             <div>
               <ReplyButton>Save</ReplyButton>
               <ReplyButton
-                onClick={this.onReplyVisibilityToggle}
+                onClick={this.onreplyVisibilityToggle}
                 className="dark-gray bg-white">
                 Close
             </ReplyButton>
@@ -87,7 +96,7 @@ console.log(this.props.postId)
   }
 }
 const mapDispatchToProps = (dispatch) => ({
-  startAddReply: (postId, reply) => dispatch(startAddReply(postId, reply))
+  startAddPost: (replyTo, reply) => dispatch(startAddPost(replyTo, reply))
 })
 
 export default connect(undefined, mapDispatchToProps)(ReplyForm)

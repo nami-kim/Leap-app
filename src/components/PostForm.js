@@ -46,13 +46,14 @@ export default class PostForm extends React.Component {
       this.setState(() => ({ error: 'Please provide title and contents.' }));
     } else {
       this.setState(() => ({ error: '' }));
-      this.props.onSubmit({
+      this.props.onSubmit('', {
         title: this.state.title,
         website: this.state.website,
         note: this.state.note,
         topic: this.state.topic,
         createdAt: this.state.createdAt.valueOf(),
-        anonymous: this.state.anonymous
+        anonymous: this.state.anonymous,
+        type: 'post'
       });
     }
   };

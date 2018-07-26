@@ -13,8 +13,8 @@ function userReducer(state = userReducerDefaultState, action) {
         updates
       }
     case 'REMOVE_USER':
-      return state.filter(({ postId }) => {
-        postId !== action.postId
+      return state.filter(({ id }) => {
+        id !== action.id
       })
     case 'SET_USERS':
       return action.users

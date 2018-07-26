@@ -11,7 +11,7 @@ export default (state = defaultPostsReducer, action) => {
       ]
     case 'EDIT_POST':
       return state.map((post) => {
-        if (post.postId === action.postId) {
+        if (post.id === action.id) {
           return {
             ...post,
             ...action.updates
@@ -21,15 +21,21 @@ export default (state = defaultPostsReducer, action) => {
         }
       })
     case 'REMOVE_POST':
-      return state.filter(({ postId }) => {
-        postId !== action.postId
-      })
+      if (type === "reply") {
+        return state.filter(({ id }) => id !== action.id)
+      } else if (type === "post") {
+        const postAndReplyIds = [...replies, action.id]
+        return postAndReplyIds.map((postAndReplyId) => {
+          return state.filter(({ id }) => id !== postAndReplyId)
+        })
+      }
+
     case 'ADD_EMOJI':
       return state.map((post) => {
-        const {emojis = []} = post
+        const { emojis = [] } = post
         const currentEmoji = emojis.find((emoji) => emoji.unified === action.emoji.unified)
 
-        if (post.postId === action.postId) {
+        if (post.id === action.id) {
           return {
             ...post,
             emojis: _.isUndefined(currentEmoji) ? [
@@ -39,12 +45,12 @@ export default (state = defaultPostsReducer, action) => {
                 uids: [action.uid]
               }
             ] : [
-              ...emojis.filter((emoji) => emoji.id !== action.emoji.id),
-              {
-                ...action.emoji,
-                uids: [...currentEmoji.uids, action.uid]
-              }
-            ]
+                ...emojis.filter((emoji) => emoji.id !== action.emoji.id),
+                {
+                  ...action.emoji,
+                  uids: [...currentEmoji.uids, action.uid]
+                }
+              ]
           }
         } else {
           return post

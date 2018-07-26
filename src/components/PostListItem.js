@@ -21,13 +21,15 @@ class PostListItem extends React.Component {
     }))
   }
   onSubmitEmoji = (emoji) => {
-    this.props.startAddEmoji(this.props.postId, emoji)
+    console.log(this.props.id)
+    console.log(this.props)
+    this.props.startAddEmoji(this.props.id, emoji)
     this.setState(() => ({
       emojiVisibility: !this.state.emojiVisibility
     }))
   }
   render() {
-    const { emojis, postId, name, title, website, topic, anonymous, createdAt } = this.props
+    const { emojis, id, name, title, website, topic, anonymous, createdAt } = this.props
     const postCreatedAt = moment(createdAt)
 
     const selectOption = options.find((option) => {
@@ -43,10 +45,13 @@ class PostListItem extends React.Component {
         <div className="w-10 m1 ma1">
           Profile Photo
         </div>
-        <Link to={`/posts/${postId}`} className="no-underline black flex w-70">
+        <Link to={`/posts/${id}`} className="no-underline black flex w-70">
           <div className="flex flex-column w-90">
             <div className="ma1">
-              <span className="fw6 f5">{title}</span><span className="fw2 f6 ph2"><a className="no-underline dark-blue" href={website}>{website}</a></span>
+              <span className="fw6 f5">{title}</span>
+              <span className="fw2 f6 ph2">
+                <span className="no-underline dark-blue" href={website}>{website}</span>
+              </span>
             </div>
             <div className="flex gray f6 ma1">
               <span>{anonymous ? 'anonymous' : name}</span>
@@ -62,17 +67,17 @@ class PostListItem extends React.Component {
         </Link>
         <div className="w-30 mv1 flex">
           <span><EmojiButton onClick={this.handleToggleVisibility}>+ emoji</EmojiButton></span>
+           <div className={this.state.emojiVisibility ? "" : "dn"}>
+            <EmojiPicker
+              onSubmit={this.onSubmitEmoji}
+              style={{ position: 'relative', top: '20px' }}
+            />
+          </div>
           <EmojiDisplay
             emojis={emojis}
             startAddEmoji={this.props.startAddEmoji}
-            postId={postId} />
-          <div className={!this.state.emojiVisibility && "dn"}>
-            <EmojiPicker
-              onSubmit={this.onSubmitEmoji}
-              style={{ position: 'absolute', right: '20px' }}
-            >
-            </EmojiPicker>
-          </div>
+            id={id} />
+         
         </div>
       </div>
 
@@ -81,7 +86,7 @@ class PostListItem extends React.Component {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  startAddEmoji: (postId, emoji) => dispatch(startAddEmoji(postId, emoji))
+  startAddEmoji: (id, emoji) => dispatch(startAddEmoji(id, emoji))
 })
 
 export default connect(undefined, mapDispatchToProps)(PostListItem)

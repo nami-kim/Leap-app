@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import moment from 'moment'
 import EmojiPicker from './EmojiPicker'
-import { EmojiButton } from './Button'
+import {ReplyButton, EmojiButton } from './Button'
 import { startAddEmoji } from '../actions/posts'
 import EmojiDisplay from './EmojiDisplay'
 import ReplyForm from './ReplyForm'
@@ -14,21 +14,25 @@ class ReplyListItem extends React.Component {
       emojiVisibility: false
     }
   }
+  
   handleToggleVisibility = (e) => {
     this.setState(() => ({
       emojiVisibility: !this.state.emojiVisibility
     }))
   }
   onSubmitEmoji = (emoji) => {
-    this.props.startAddEmojiReply(this.props.replyId, emoji)
+    console.log(this.props)
+    console.log(this.props.post.id)
+    console.log(this.props.post)
+    this.props.startAddEmoji(this.props.post.id, emoji)
     this.setState(() => ({
       emojiVisibility: !this.state.emojiVisibility
     }))
   }
   render() {
-    const { emojis, postId, name, note, anonymous, createdAt } = this.props
+    const { uid, emojis, id, name, note, anonymous, createdAt } = this.props.post
     const replyCreatedAt = moment(createdAt)
-
+    const isAuthor = uid === this.props.authUser.uid
     return (
       <div className="flex pa2 mh2">
         <div className="w-10 mv1">
@@ -49,27 +53,34 @@ class ReplyListItem extends React.Component {
             <span><EmojiButton onClick={this.handleToggleVisibility}>+ emoji</EmojiButton></span>
             <EmojiDisplay
               emojis={emojis}
-              startAddEmojiReply={this.props.startAddEmojiReply}
-              postId={postId} />
-            <div className={!this.state.emojiVisibility && "dn"}>
+              startAddEmoji={this.props.startAddEmoji}
+              id={id} />
+            <div className={this.state.emojiVisibility ? "" : "dn"}>
               <EmojiPicker
                 onSubmit={this.onSubmitEmoji}
-                style={{ position: 'absolute', top: '60px' }}
-              >
-              </EmojiPicker>
+                style={{ position: 'relative', top: '30px' }}
+              />
             </div>
           </div>
+          <div className="mv2 flex items-center">
+            <span className={isAuthor ? "mv3" : "dn"}>
+              <ReplyButton className="black bg-light-gray">Remove</ReplyButton>
+            </span>
+            <ReplyForm post={this.props.post} type="reply" />
+          </div>
         </div>
-        <div className="mv2 flex items-center">
-          <ReplyForm {...this.props.post} />
-        </div>
+        
       </div>
     )
   }
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  startAddEmojiReply: (replyId, emoji) => dispatch(startAddEmoji(replyId, emoji))
+  startAddEmoji: (id, emoji) => dispatch(startAddEmoji(id, emoji))
 })
 
-export default connect(undefined, mapDispatchToProps)(ReplyListItem)
+const mapStateToProps = (state) => ({
+  authUser: state.authUser
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(ReplyListItem)

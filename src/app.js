@@ -11,7 +11,6 @@ import 'react-dates/lib/css/_datepicker.css';
 import { firebase } from './firebase/firebase';
 import LoadingPage from './components/LoadingPage';
 import { startSetPosts } from './actions/posts'
-import { startSetReplies } from './actions/replies'
 import { startSetUsers, startAddUser } from './actions/users'
 
 const store = configureStore();
@@ -37,9 +36,8 @@ firebase.auth().onAuthStateChanged((user) => {
     store.dispatch(login(user.uid));
     const promise1 = store.dispatch(startSetPosts())
     const promise2 = store.dispatch(startSetUsers())
-    const promise3 = store.dispatch(startSetReplies())
    
-    Promise.all([promise1, promise2, promise3])
+    Promise.all([promise1, promise2])
       .then(() => {
         const existingUsers = store.getState().users
         const userFound = !!existingUsers.find((existingUser) => {

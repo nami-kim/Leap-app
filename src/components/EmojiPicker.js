@@ -24,6 +24,7 @@ export default class EmojiPicker extends React.Component {
           onSelect={this.onSelectEmoji}
           emojiTooltip={true}
           showPreview={false}
+          
         />
 
       </div>

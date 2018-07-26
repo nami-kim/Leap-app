@@ -5,8 +5,8 @@ import { ContainerForm } from './Container'
 import { startAddPost } from '../actions/posts'
 
 export class AddPostPage extends React.Component {
-  onSubmit = (post) => {
-    this.props.startAddPost(post)
+  onSubmit = (replyTo, post) => {
+    this.props.startAddPost(replyTo, post)
       .then(() => this.props.history.push('/dashboard'))
   }
   render() {
@@ -20,7 +20,7 @@ export class AddPostPage extends React.Component {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  startAddPost: (post) => dispatch(startAddPost(post))
+  startAddPost: (replyTo, post) => dispatch(startAddPost(replyTo, post))
 })
 
 export default connect(undefined, mapDispatchToProps)(AddPostPage)

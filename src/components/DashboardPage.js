@@ -2,7 +2,6 @@ import React from 'react';
 import PostFilters from './PostFilters'
 import PostList from './PostList'
 import { connect } from 'react-redux';
-import { firebase } from '../firebase/firebase'
 
 
 export class DashboardPage extends React.Component {
@@ -11,6 +10,7 @@ export class DashboardPage extends React.Component {
   }
   render() {
     console.log(this.props.posts)
+    console.log(this.props.users.find((user) => user.uid === this.props.authUser.uid).name)
     return (
       <div>
         <PostFilters />
