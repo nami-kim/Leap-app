@@ -32,8 +32,10 @@ class PostPage extends React.Component {
     }))
   }
   render() {
-    console.log(this.props.post)
-    const { createdAt, topic, title, website, anonymous, name, note, id, emojis, uid } = this.props.post
+    console.log('this.props.post', this.props.post)
+    console.log('this.props.posts', this.props.posts)
+    const { createdAt , topic, title, website, anonymous, note, id, emojis, uid, replies } = this.props.post
+    const name = this.props.users.find((user) => uid === user.uid).name || ''
     const isAuthor = uid === this.props.authUser.uid
     const postCreatedAt = moment(createdAt)
     const selectOption = options.find((option) => {
@@ -59,7 +61,7 @@ class PostPage extends React.Component {
             <div className="w-100 flex gray f6 mv2">
               <span>{anonymous ? 'anonymous' : name}</span>
               <span className="mh1">·</span>
-              <span>0 replies</span>
+              <span>{replies.length} replies</span>
               <span className="mh1">·</span>
               <span>{postCreatedAt.startOf('hour').fromNow()}</span>
             </div>
@@ -90,12 +92,18 @@ class PostPage extends React.Component {
               </Link>
             </div>
             <div className="mv2 flex items-center">
-              <ReplyForm post={this.props.post} type="replyToPost" history={this.props.history} linkId={this.props.match.params.id}/>
+              <ReplyForm 
+              post={this.props.post}
+              type="replyToPost" 
+              history={this.props.history} 
+              linkId={this.props.match.params.id}
+              name={name}
+              />
             </div>
           </div>
         </div>
         <div className="w-100 bl b--black-20">
-          <ReplyList post={this.props.post} posts={this.props.posts} />
+          <ReplyList post={this.props.post} />
         </div>
         
       </Container>
@@ -110,7 +118,8 @@ const mapStateToProps = (state, props) => {
     post: state.posts.find((post) => {
       return post.id === props.match.params.id
     }),
-    authUser: state.authUser
+    authUser: state.authUser,
+    users: state.users
   }
 }
 

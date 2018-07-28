@@ -18,7 +18,15 @@ export const innerForm = ({
 }) => (
     <ContainerForm>
       <h1>Account</h1>
-      <ProfilePhoto />
+      <div className="flex">
+        <div className="w-70">
+          <ProfilePhoto />
+        </div>
+        <div className="w-30">
+          <span className="pa1 ttu tracked f6 lh-copy white bg-blue br-2"><i className="far fa-eye"></i>public view</span>
+        </div>
+      </div>
+
       <Form onSubmit={handleSubmit}>
         <h4 className="ma0">Name</h4>
         <Field

@@ -21,15 +21,17 @@ export default (state = defaultPostsReducer, action) => {
         }
       })
     case 'REMOVE_POST':
-      if (type === "reply") {
-        return state.filter(({ id }) => id !== action.id)
-      } else if (type === "post") {
-        const postAndReplyIds = [...replies, action.id]
-        return postAndReplyIds.map((postAndReplyId) => {
-          return state.filter(({ id }) => id !== postAndReplyId)
-        })
-      }
-
+      return state.map((post) => {
+        if (post.id === action.id) {
+          return {
+            ...post,
+            isRemoved: true
+          }
+        } else {
+          return post
+        }
+      })
+      
     case 'ADD_EMOJI':
       return state.map((post) => {
         const { emojis = [] } = post

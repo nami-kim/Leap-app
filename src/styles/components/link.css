@@ -1,0 +1,21 @@
+.link {
+  text-decoration: none;
+  cursor: pointer;
+  color:#48adff;
+  margin: auto 0;
+  font-weight: bold;
+}
+.link:hover {
+  transition: transform 0.15s ease-in;
+  text-decoration: underline;
+  color: #00449E;
+}
+
+.link:active {
+  transition: transform 0.15s ease-in;
+}
+
+.link:disabled,
+.link.is-disabled {
+  opacity: .5;
+}

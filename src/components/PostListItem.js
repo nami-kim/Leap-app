@@ -29,7 +29,8 @@ class PostListItem extends React.Component {
     }))
   }
   render() {
-    const { emojis, id, name, title, website, topic, anonymous, createdAt } = this.props
+    const { emojis, uid, id, title, website, topic, anonymous, createdAt, replies } = this.props
+    const name = this.props.users.find((user) => uid === user.uid).name || ''
     const postCreatedAt = moment(createdAt)
 
     const selectOption = options.find((option) => {
@@ -56,7 +57,7 @@ class PostListItem extends React.Component {
             <div className="flex gray f6 ma1">
               <span>{anonymous ? 'anonymous' : name}</span>
               <span className="mh1">·</span>
-              <span>0 replies</span>
+              <span>{replies.length} replies</span>
               <span className="mh1">·</span>
               <span>{postCreatedAt.startOf('hour').fromNow()}</span>
             </div>
@@ -85,11 +86,14 @@ class PostListItem extends React.Component {
   }
 }
 
+const mapStateToProps = (state) => ({
+  users: state.users
+})
 const mapDispatchToProps = (dispatch) => ({
   startAddEmoji: (id, emoji) => dispatch(startAddEmoji(id, emoji))
 })
 
-export default connect(undefined, mapDispatchToProps)(PostListItem)
+export default connect(mapStateToProps, mapDispatchToProps)(PostListItem)
 
 
 

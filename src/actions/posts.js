@@ -17,24 +17,24 @@ export const startAddPost = (replyTo, postData = {}) => {
       topic = '',
       anonymous = false,
       createdAt = 0,
-      type = ''
+      type = '',
+      replies = [],
+      isRemoved = false,
     } = postData
 
     const uid = getState().authUser.uid
-    const userName = getState().users.find((user) => {
-      return user.uid === uid
-    }).name
 
     const post = {
       type,
       uid,
-      name: _.isUndefined(userName) ? '' : userName,
       title,
       website,
       note,
       topic,
       anonymous,
-      createdAt
+      createdAt,
+      replies,
+      isRemoved
     }
 
     if (post.type === 'post') {
@@ -54,7 +54,7 @@ export const startAddPost = (replyTo, postData = {}) => {
             ...post
           }))
 
-          database.ref(`posts/${replyTo}/replies`).push({ id }).then(() => {
+          database.ref(`posts/${replyTo}/replies/${id}`).set({ id }).then(() => {
             const currentReplyArray = getState().posts.find((post) => {
               return post.id === replyTo
             }).replies
@@ -76,33 +76,24 @@ export const startAddPost = (replyTo, postData = {}) => {
 
 
 // remove post or reply
-export const removePost = ({ uid, id, type, replies } = {}) => ({
+export const removePost = (id = '') => ({
   type: 'REMOVE_POST',
-  type,
-  uid,
-  id,
-  replies
+  id
 })
 
 // start remove post or reply
-export const startRemovePost = ({ uid, id, type } = {}) => {
+// uid check is not necessary as edit/remove buttons will be enabled for a creator only
+export const startRemovePost = (id = '') => {
   return (dispatch, getState) => {
-    if ({ uid } === getState().auth.uid && type === "post") {
-      return database.ref(`posts/${id}`).remove().then(() => {
-        dispatch(removePost({ uid, id, type, replies }))
-      })
-    } else if ({ uid } === getState().auth.uid && type === "reply") {
-      const postAndReplyIds = [...replies, action.id]
-      return postAndReplyIds.map((postAndReplyId) => {
-        return database.ref(`posts/${postAndReplyId}`).remove().then(() => {
-          dispatch(removePost({ uid, id, type, replies }))
-        })
-      })  
-    }
+  
+    console.log('startRemovePost is running')
+    database.ref(`posts/${id}`).update({isRemoved: true}).then(() => {
+      dispatch(removePost(id))
+    })
   }
 }
 
-  
+
 // edit post
 export const editPost = (id, updates) => ({
   type: 'EDIT_POST',

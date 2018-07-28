@@ -55,7 +55,7 @@ export class ReplyForm extends React.Component {
         <div className={this.state.replyVisibility ? "dn" : "w-100 mv2"}>
           <ReplyButton
             className={this.props.type === "reply" ? "dark-blue bg-dark" : "white bg-blue-custom"}
-            onClick={this.onreplyVisibilityToggle}>Reply to {this.props.post.name}
+            onClick={this.onreplyVisibilityToggle}>Reply to {this.props.name}
           </ReplyButton>
           <span
             className={this.props.type === "reply" ? "dn" : ""}>

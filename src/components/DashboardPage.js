@@ -11,6 +11,7 @@ export class DashboardPage extends React.Component {
   render() {
     console.log(this.props.posts)
     console.log(this.props.users.find((user) => user.uid === this.props.authUser.uid).name)
+    console.log(this.props.filters)
     return (
       <div>
         <PostFilters />
@@ -24,6 +25,7 @@ const mapStateToProps = (state) => ({
   users: state.users,
   authUser: state.authUser,
   posts: state.posts,
+  filters: state.filters
 })
 
 

@@ -1,23 +1,33 @@
 import React from 'react'
-import { connect } from 'react-redux'
 import ReplyListItem from './ReplyListItem'
-import _ from 'lodash/fp'
+import { connect } from 'react-redux'
 
-const ReplyList = (props) => {
-  return (
-    // replies have an array of ids
-    // find ids -> map array of objects that have those ids
-    <div>
-      {!_.isUndefined(props.post.replies) && props.post.replies.map((replyId) => {
-        return <ReplyListItem key={replyId} post={props.posts.find((post) => {
-          return post.id === replyId
-        })} />
-      })}
-      
-    </div>
-  )
+export class ReplyList extends React.Component {
 
-
+  render() {
+    console.log(this.props.posts)
+    console.log(this.props.post)
+    const replyArray = this.props.post.replies
+    console.log(replyArray)
+    const replyObjectArray = replyArray.map((replyId) => {
+      return this.props.posts.find((post) => post.id === replyId)
+    })
+    console.log(replyObjectArray)
+    return (
+      <div>
+        {replyArray !== [] && replyObjectArray.map((reply) => {
+          return <ReplyListItem
+            key={reply.id}
+            replyTo={this.props.post.id}
+            post={reply} />
+        })}
+      </div>
+    )
+  }
 }
-export default ReplyList
+
+const mapStateToProps = (state) => ({
+  posts: state.posts
+})
+export default connect(mapStateToProps)(ReplyList)
 

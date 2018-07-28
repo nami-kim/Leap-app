@@ -1,8 +1,8 @@
-
 const defaultFiltersReducer = {
   text: '',
-  sortByTopic: '',
-  sortBy: 'new'
+  sortBy: 'new',
+  topic: '',
+  uid: ''
 }
 
 export default (state = defaultFiltersReducer, action) => {
@@ -12,10 +12,10 @@ export default (state = defaultFiltersReducer, action) => {
         ...state,
         text: action.text
       }
-    case 'SORT_BY_TOPIC':
+    case 'FILTER_BY_TOPIC':
       return {
         ...state,
-        sortByTopic: action.topic
+        topic: action.topic
       }
     case 'SORT_BY_NEW':
       return {
@@ -27,6 +27,11 @@ export default (state = defaultFiltersReducer, action) => {
       ...state,
       sortBy: 'top'
     }
+    case 'FILTER_BY_MY_FEED':
+      return {
+        ...state,
+        uid: action.uid
+      }
     default:
       return state
   }

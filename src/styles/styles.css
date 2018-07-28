@@ -1,14 +1,14 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto:300,400,700');
+@import url('https://use.fontawesome.com/releases/v5.2.0/css/all.css');
 @import '../../node_modules/tachyons/css/tachyons.min.css';
 @import './base/settings.css';
 @import './base/base.css';
 @import './components/box-layout.css';
 @import './components/burger-menu.css';
-@import './components/header.css';
 @import './components/button.css';
 @import './components/page-header.css';
 @import './components/input-group.css';
 @import './components/inputs.css';
 @import './components/form.css';
-@import './components/list.css';
+@import './components/link.css';
 @import './components/loader.css';

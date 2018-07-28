@@ -9,7 +9,7 @@ export const Header = () => (
     <ContainerHeader>
       <div className="flex flex-wrap items-center">
         <div className="w-100 w-50-m w-third-ns pv2 pv0-ns">
-          <Link className="" to="/dashboard">Leap</Link>
+          <Link className="no-underline blue f3 fw7" to="/dashboard">Leap Clone</Link>
         </div>
         <div className="w-100 w-50-m w-third-ns pv0">
           <input className="w-100 ba b--black-20 pa2 f5 " type="text" placeholder="Search for a member or post" />
