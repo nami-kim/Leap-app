@@ -16,9 +16,7 @@ const PostList = (props) => (
   </Container>
 )
 
-const mapStateToProps = (state) => {
-  return {
-    posts: state.posts
-  };
-};
+const mapStateToProps = (state) => ({
+    posts: selectPosts(state.posts, state.filters)
+})
 export default connect(mapStateToProps)(PostList)

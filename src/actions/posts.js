@@ -19,6 +19,7 @@ export const startAddPost = (replyTo, postData = {}) => {
       createdAt = 0,
       type = '',
       replies = [],
+      emojies = [],
       isRemoved = false,
     } = postData
 
@@ -34,6 +35,7 @@ export const startAddPost = (replyTo, postData = {}) => {
       anonymous,
       createdAt,
       replies,
+      emojies,
       isRemoved
     }
 

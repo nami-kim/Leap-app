@@ -5,31 +5,72 @@ import TopicSelect from './TopicSelect'
 import Button from './Button'
 import Container from './Container'
 import { sortByNew, sortByTop, filterByMyFeed, filterByTopic } from '../actions/filters'
+import selectPosts from '../selectors/posts'
 
 export class PostFilters extends React.Component {
- 
+  state = {
+    newBtn: false,
+    topBtn: false,
+    myFeedBtn: false,
+    topic: '',
+  }
   onNewBtn = () => {
+    this.setState(() => ({
+      newBtn: !this.state.newBtn,
+      topBtn: false,
+      myFeedBtn: false
+    }))
     this.props.sortByNew()
   }
   onTopBtn = () => {
+    this.setState(() => ({
+      newBtn: false,
+      topBtn: !this.state.topBtn,
+      myFeedBtn: false
+    }))
     this.props.sortByTop()
   }
   onMyFeedBtn = () => {
-    this.props.filterByMyFeed(this.props.authUser.uid)
+    const uid = this.props.authUser.uid
+    this.setState(() => ({
+      newBtn: false,
+      topBtn: false,
+      myFeedBtn: !this.state.myFeedBtn
+    }), () => {
+      if (this.state.myFeedBtn) {
+        this.props.filterByMyFeed(uid)
+      } else {
+        this.props.filterByMyFeed('')
+      }
+    })
   }
- 
+  onTopicSelect = (selectedOption) => {
+    console.log(selectedOption)
+    if (selectedOption !== null) {
+      this.setState(() => ({ topic: selectedOption.value }), () => {
+        this.props.filterByTopic(this.state.topic)
+      })
+    } else if (selectedOption === null) {
+      this.setState(() => ({ topic: '' }), () => {
+        this.props.filterByTopic('')
+      })
+    }
+  }
   render() {
+    console.log(this.props.filters)
+    console.log(this.props.posts)
+    console.log(this.state)
     return (
       <Container>
         <div className="flex justify-between-ns flex-wrap pv2-ns pv0 bb b--black-20">
           <div className="w-100 w-50-m w-25-l pv2">
-            <TopicSelect />
+            <TopicSelect onChange={this.onTopicSelect} />
           </div>
           <div className="w-100 w-50-m w-50-l pv2">
             <div className="flex justify-center justify-end-m">
-              <button className="ba b--black-20 ph3 pv2 mh1 f5 btn" onClick={this.onNewBtn}>New</button>
-              <button className="ba b--black-20 ph3 pv2 mh1 f5 pointer hover-bg-light-gray" onClick={this.onTopBtn}>Top</button>
-              <button className="ba b--black-20 ph3 pv2 mh1 f5 pointer hover-bg-light-gray" onClick={this.onMyFeedBtn}>My Feed</button>
+              <button className={this.state.newBtn ? "bold bg-light-silver mh1 pv2" : "sortBtn mh1 pv2"} onClick={this.onNewBtn}>New</button>
+              <button className={this.state.topBtn ? "bold bg-light-silver mh1 pv2" : "sortBtn mh1 pv2"} onClick={this.onTopBtn}>Top</button>
+              <button className={this.state.myFeedBtn ? "bold bg-light-silver mh1 pv2" : "sortBtn mh1 pv2"} onClick={this.onMyFeedBtn}>My Feed</button>
             </div>
           </div>
           <div className="w-100 w-50-m w-25-l pv2">
@@ -43,7 +84,8 @@ export class PostFilters extends React.Component {
 
 const mapStateToProps = (state) => ({
   filters: state.filters,
-  authUser: state.authUser
+  authUser: state.authUser,
+  posts: selectPosts(state.posts, state.filters)
 })
 
 const mapDispatchToProps = (dispatch) => ({

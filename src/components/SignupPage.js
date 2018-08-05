@@ -10,7 +10,7 @@ export class SignupPage extends React.Component {
     error: ''
   }
   onSubmit = (user) => {
-    this.props.startAddUser(emailAndPassword, user)
+    this.props.startAddUser('emailAndPassword', user)
       .then(() => {
         this.props.history.push('/')
       })

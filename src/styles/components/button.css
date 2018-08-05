@@ -22,3 +22,29 @@
 .btn.is-disabled {
   opacity: .5;
 }
+
+
+.sortBtn {
+  background: none;
+  box-shadow: none;
+  cursor: pointer;
+}
+.sortBtn:hover {
+  box-shadow: inset 0 0 0 20rem rgba(0, 0, 0, .170);
+  transform: translateY(-1px);
+  transition: transform 0.15s ease-in;
+  
+}
+
+.sortBtn:active {
+  box-shadow: inset 0 0 0 20rem rgba(0, 0, 0, .170),
+    inset 0 3px 4px 0 rgba(0, 0, 0, .50),
+    0 0 1px rgba(0, 0, 0, .170);
+  transform: translateY(1px);
+  transition: transform 0.15s ease-in;
+}
+
+.sortBtn:disabled,
+.sortBtn.is-disabled {
+  opacity: .5;
+}

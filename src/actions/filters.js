@@ -4,7 +4,7 @@ export const setTextFilter = (text = '') => ({
   text
 })
 // SORT_BY_TOPIC
-export const filterByTopic = (topic) => ({
+export const filterByTopic = (topic = '') => ({
   type: 'FILTER_BY_TOPIC',
   topic
 });
@@ -18,7 +18,7 @@ export const sortByTop= () => ({
   type: 'SORT_BY_TOP'
 })
 // SORY_BY_MY_FEED
-export const filterByMyFeed= (uid) => ({
+export const filterByMyFeed= (uid = '') => ({
   type: 'FILTER_BY_MY_FEED',
   uid
 })

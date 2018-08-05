@@ -32,7 +32,7 @@ export default class SignupForm extends React.Component {
       this.setState(() => ({ error: 'Password does not match. Pleae enter the correct password' }))
     } else {
       this.setState(() => ({ error: '' }))
-      this.props.onSubmit('email', {
+      this.props.onSubmit({
         email: this.state.email,
         passwordOne: this.state.passwordOne,
         passwordTwo: this.state.passwordTwo
@@ -41,11 +41,6 @@ export default class SignupForm extends React.Component {
   }
 
   render() {
-    const {
-      passwordOne,
-      passwordTwo,
-      email
-    } = this.state
 
     return (
       <div>
@@ -54,14 +49,14 @@ export default class SignupForm extends React.Component {
             className="br2 f6 db w-100 pv3 ph2 mv3 ba b--black-20"
             type="text"
             placeholder="Email"
-            value={email}
+            value={this.state.email}
             onChange={this.onEmailChange}
           />
           <input
             className="br2 f6 db w-100 pv3 ph2 mv3 ba b--black-20"
             type="text"
             placeholder="Password"
-            value={passwordOne}
+            value={this.state.passwordOne}
             onChange={this.onPasswordOneChange}
           />
           {
@@ -70,7 +65,7 @@ export default class SignupForm extends React.Component {
               className="br2 f6 db w-100 pv3 ph2 mv3 ba b--black-20"
               type="text"
               placeholder="Confirm Password"
-              value={passwordTwo}
+              value={this.state.passwordTwo}
               onChange={this.onPasswordTwoChange}
             />
           }

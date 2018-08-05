@@ -2,13 +2,14 @@
 
 export default (posts, { topic, text, sortBy, uid }) => {
   return posts.filter((post) => {
-    const filterByTopic = post.topic === topic
-    const filterByUid = post.uid === uid
     const textMatch =
       post.note.toLowerCase().includes(text.toLowerCase()) ||
       post.title.toLowerCase().includes(text.toLowerCase())
-
-    return filterByUid && filterByTopic && textMatch;
+    
+    const filterByTopic = topic === '' ? post : post.topic === topic
+    const filterByUid = uid === '' ? post: post.uid === uid
+    
+    return textMatch && filterByTopic && filterByUid
   }).sort((a, b) => {
     if (sortBy === 'new') {
       return a.createdAt < b.createdAt ? -1 : 1;
@@ -17,3 +18,4 @@ export default (posts, { topic, text, sortBy, uid }) => {
     }
   })
 }
+
